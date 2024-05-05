@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"> <!-- Définit l'encodage des caractères -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Définit les propriétés de la vue -->
+    <title>Harry Potter</title> <!-- Titre de la page -->
+</head>
+<body>
+    <div id="characters"></div> <!-- Conteneur où seront affichées les informations sur les personnages -->
+    <script>
+        // Fonction pour récupérer les données des personnages à partir de l'API Harry Potter
+        function fetchCharacters() {
+            return fetch('https://hp-api.lainocs.fr/characters')
+            .then(response => response.json()); // Retourne la réponse au format JSON
+        }
+
+        // Fonction asynchrone pour afficher les informations sur les personnages
+        async function displayCharacters() {
+            const data = await fetchCharacters(); // Récupérer les données des personnages
+            data.forEach(character => {
+                // Pour chaque personnage, créer un lien vers une page détaillée avec son slug comme paramètre
+                document.querySelector('#characters').innerHTML += `
+                    <a href="single-HP.html?slug=${character.slug}">
+                        <div class="character">
+                            <h2>${character.name}</h2> <!-- Nom du personnage -->
+                            <img src="${character.image}" alt="${character.name}"> <!-- Image du personnage -->
+                        </div>
+                    </a>
+                `;
+            });
+        }
+
+        displayCharacters(); // Appeler la fonction pour afficher les personnages dès que la page est chargée
+    </script>
+</body>
+</html>

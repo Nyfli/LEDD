@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"> <!-- Définit l'encodage des caractères -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Définit les propriétés de la vue -->
+    <title>Document</title> <!-- Titre de la page -->
+</head>
+<body>
+    <div id="character"></div> <!-- Conteneur où seront affichées les informations sur le personnage -->
+    <script>
+        // Fonction pour récupérer les données du personnage en fonction du slug passé en paramètre dans l'URL
+        function fetchCharacter() {
+            let url = window.location.search; // Récupère les paramètres de l'URL
+            let slug = new URLSearchParams(url).get('slug'); // Extrait la valeur du paramètre 'slug'
+            return fetch("https://hp-api.lainocs.fr/characters/" + slug) // Requête à l'API avec le slug
+                .then(response => response.json()); // Retourne la réponse au format JSON
+        }
+
+        function fetchhouse(data){
+            return fetch("http://192.168.43.189:3000", {
+                method: "POST",
+                headers: {
+            "Content-Type": "application/json",
+            },
+                body: JSON.stringify({
+                message: data.house,
+            }),
+        }).then((response) => response.json());
+
+        };
+
+        // Fonction asynchrone pour afficher les détails du personnage
+        async function displayCharacter() {
+            const data = await fetchCharacter(); // Récupérer les données du personnage
+            document.querySelector('#character').innerHTML = `
+                <h1>${data.name}</h1> <!-- Nom du personnage -->
+                <img src="${data.image}" alt="${data.name}"> <!-- Image du personnage -->
+                <a href="HP.html">Retour</a> <!-- Lien pour revenir à la page précédente -->
+            `;
+            await fetchhouse(data);
+        }
+
+        displayCharacter(); // Appeler la fonction pour afficher les détails du personnage dès que la page est chargée
+    </script>
+</body>
+</html>
